@@ -58,10 +58,10 @@ check_sys() {
 Installation_dependency() {
   if [[ ${release} == "centos" ]]; then
     yum update
-    yum install -y gzip ca-certificates curl
+    yum install -y gzip ca-certificates curl unzip
   else
     apt-get update
-    apt-get install -y ca-certificates curl
+    apt-get install -y ca-certificates curl unzip
   fi
   cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
   mkdir /var/log/au
@@ -70,13 +70,15 @@ Installation_dependency() {
 download() {
   mkdir /usr/local/etc/au/
 # TODO: Use zip file
-  airuniverse_url="https://github.com/crossfw/Air-Universe/releases/download/${VERSION}/Air-Universe-linux-amd64"
+  airuniverse_url="https://github.com/crossfw/Air-Universe/releases/download/${VERSION}/Air-Universe-linux-64.zip"
   xray_json_url="https://raw.githubusercontent.com/crossfw/Air-Universe-install/master/xray_config.json"
 
   mv /usr/local/etc/xray/config.json /usr/local/etc/xray/config.json.bak
-  wget -N --no-check-certificate ${xray_json_url} -O /usr/local/etc/xray/config.json
-  wget -N --no-check-certificate ${airuniverse_url} -O /usr/local/bin/au
-
+  wget -N  ${xray_json_url} -O /usr/local/etc/xray/config.json
+  wget -N  ${airuniverse_url} -O ./au.zip
+  unzip ./au.zip -d /usr/local/bin/au
+  rm ./au.zip
+  mv /usr/local/bin/Air-Universe /usr/local/bin/au
   chmod +x /usr/local/bin/au
 
 }
