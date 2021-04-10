@@ -69,7 +69,6 @@ Installation_dependency() {
 }
 download() {
   mkdir /usr/local/etc/au/
-# TODO: Use zip file
   airuniverse_url="https://github.com/crossfw/Air-Universe/releases/download/${VERSION}/Air-Universe-linux-64.zip"
   xray_json_url="https://raw.githubusercontent.com/crossfw/Air-Universe-install/master/xray_config.json"
 
