@@ -76,7 +76,7 @@ download() {
   mv /usr/local/etc/xray/config.json /usr/local/etc/xray/config.json.bak
   wget -N  ${xray_json_url} -O /usr/local/etc/xray/config.json
   wget -N  ${airuniverse_url} -O ./au.zip
-  unzip ./au.zip -d /usr/local/bin/au
+  unzip ./au.zip -d /usr/local/bin/
   rm ./au.zip
   mv /usr/local/bin/Air-Universe /usr/local/bin/au
   chmod +x /usr/local/bin/au
