@@ -314,8 +314,9 @@ check_install() {
 }
 
 acme() {
-  cert_path="/usr/local/share/server.crt"
-  key_path="/usr/local/share/server.key"
+  mkdir -p /usr/local/share/au/
+  cert_path="/usr/local/share/au/server.crt"
+  key_path="/usr/local/share/au/server.key"
   curl  https://get.acme.sh | sh
   alias acme.sh=~/.acme.sh/acme.sh
   read -r -p "Input domain" domain
