@@ -365,6 +365,8 @@ acme() {
 
     ~/.acme.sh/acme.sh  --issue  -d "${domain}" --dns dns_cf --cert-file "${cert_path}" --key-file "${key_path}"
   fi
+
+  chmod -R 644 /usr/local/share/au/
 }
 
 show_status() {
