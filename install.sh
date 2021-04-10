@@ -71,7 +71,7 @@ download() {
   mkdir /usr/local/etc/au/
 # TODO: Use zip file
   airuniverse_url="https://github.com/crossfw/Air-Universe/releases/download/${VERSION}/Air-Universe-linux-amd64"
-  xray_json_url="https://raw.githubusercontent.com/crossfw/Air-Universe/master/configs/xray_json/multiIn.json"
+  xray_json_url="https://raw.githubusercontent.com/crossfw/Air-Universe-install/master/xray_config.json"
 
   mv /usr/local/etc/xray/config.json /usr/local/etc/xray/config.json.bak
   wget -N --no-check-certificate ${xray_json_url} -O /usr/local/etc/xray/config.json
