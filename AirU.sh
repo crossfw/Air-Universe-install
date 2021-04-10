@@ -319,7 +319,7 @@ acme() {
   key_path="/usr/local/share/au/server.key"
   curl  https://get.acme.sh | sh
   alias acme.sh=~/.acme.sh/acme.sh
-  source ~/.bashrc
+  source ~/.bash_profile
 
   read -r -p "Input domain: " domain
 
