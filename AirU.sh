@@ -338,20 +338,20 @@ acme() {
 
     if [ "$http_type" == "1" ]; then
       read -r -p "Input web path: " web_path
-      acme.sh  --issue  -d "${domain}" --webroot  "${web_path}" --cert-file "${cert_path}" --key-file "${key_path}"
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --webroot  "${web_path}" --cert-file "${cert_path}" --key-file "${key_path}"
       return 0
     fi
     if [ "$http_type" == "2" ]; then
-      acme.sh  --issue  -d "${domain}" --nginx --cert-file "${cert_path}" --key-file "${key_path}"
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --nginx --cert-file "${cert_path}" --key-file "${key_path}"
       return 0
     fi
     if [ "$http_type" == "3" ]; then
       read -r -p "Input web path: " web_path
-      acme.sh  --issue  -d "${domain}" --apache --cert-file "${cert_path}" --key-file "${key_path}"
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --apache --cert-file "${cert_path}" --key-file "${key_path}"
       return 0
     fi
     if [ "$http_type" == "4" ]; then
-      acme.sh  --issue  -d "${domain}" --standalone --cert-file "${cert_path}" --key-file "${key_path}"
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --standalone --cert-file "${cert_path}" --key-file "${key_path}"
       return 0
     fi
 
@@ -362,7 +362,8 @@ acme() {
     export CF_Email="${cf_email}"
     read -r -p "Input your CloudFlare Key: " cf_key
     export CF_Key="${cf_key}"
-    acme.sh  --issue  -d "${domain}" --dns dns_cf --cert-file "${cert_path}" --key-file "${key_path}"
+
+    ~/.acme.sh/acme.sh  --issue  -d "${domain}" --dns dns_cf --cert-file "${cert_path}" --key-file "${key_path}"
   fi
 }
 
