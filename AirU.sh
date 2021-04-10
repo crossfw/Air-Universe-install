@@ -318,7 +318,7 @@ acme() {
   key_path="/usr/local/share/server.key"
   curl  https://get.acme.sh | sh
   read -r -p "Input domain" domain
-  read -r -p "Choose type: " panelnum
+
   echo && echo -e "Choose type:
   1. http
   2. dns (only support cloudflare)"
