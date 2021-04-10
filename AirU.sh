@@ -94,7 +94,10 @@ install() {
         fi
     fi
 }
-
+update_xray(){
+  bash -c "$(curl -L https://github.com/crossfw/Xray-install/raw/main/install-release.sh)" @ install
+  return 0
+}
 update() {
     if [[ $# == 0 ]]; then
         echo && echo -n -e "输入指定版本(默认最新版): " && read version
@@ -415,7 +418,6 @@ show_usage() {
     echo "Air-Universe enable       - 设置 Air-Universe 开机自启"
     echo "Air-Universe disable      - 取消 Air-Universe 开机自启"
     echo "Air-Universe log          - 查看 Air-Universe 日志"
-    echo "Air-Universe update       - 更新 Air-Universe"
     echo "Air-Universe update x.x.x - 更新 Air-Universe 指定版本"
     echo "Air-Universe install      - 安装 Air-Universe"
     echo "Air-Universe uninstall    - 卸载 Air-Universe"
@@ -444,7 +446,7 @@ show_menu() {
 ————————————————
  ${green}11.${plain} 一键安装 bbr (最新内核)
  ${green}12.${plain} 查看 Air-Universe & Xray 版本
- ${green}13.${plain} 升级维护脚本
+ ${green}13.${plain} 升级Xray内核
  "
  #后续更新可加入上方字符串中
     show_status
@@ -477,7 +479,7 @@ show_menu() {
         ;;
         12) check_install && show_Air-Universe_version
         ;;
-        13) update_shell
+        13) check_install && update_xray && restart
         ;;
         *) echo -e "${red}请输入正确的数字 [0-12]${plain}"
         ;;
