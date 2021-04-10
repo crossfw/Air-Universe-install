@@ -318,7 +318,7 @@ acme() {
   cert_path="/usr/local/share/au/server.crt"
   key_path="/usr/local/share/au/server.key"
   curl  https://get.acme.sh | sh
-  alias "acme.sh=~/.acme.sh/acme.sh"
+  alias acme.sh=~/.acme.sh/acme.sh
   source ~/.bashrc
 
   read -r -p "Input domain: " domain
@@ -362,7 +362,6 @@ acme() {
     export CF_Email="${cf_email}"
     read -r -p "Input your CloudFlare Key: " cf_key
     export CF_Key="${cf_key}"
-
     acme.sh  --issue  -d "${domain}" --dns dns_cf --cert-file "${cert_path}" --key-file "${key_path}"
   fi
 }
