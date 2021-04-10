@@ -18,9 +18,9 @@ create_folders() {
 panelConfig() {
   echo "Air-Universe $VERSION + Xray"
   echo "########Air-Universe config#######"
-  read -r -p "Enter node_ids, (eg 1,2,3): " nIds
   read -r -p "Enter panel domain(Include https:// or http://): " pUrl
   read -r -p "Enter panel token: " nKey
+  read -r -p "Enter node_ids, (eg 1,2,3): " nIds
   echo && echo -e "Choose panel type:
   1. SSPanel
   2. V2board"
@@ -105,7 +105,7 @@ get_latest_version() {
 }
 makeConfig() {
   mkdir -p /usr/lib/systemd/system/
-  cat > /usr/local/etc/au/au.json <<EOF
+  cat >/usr/local/etc/au/au.json <<EOF
 {
   "panel": {
     "type": "${panelType}",
@@ -123,7 +123,7 @@ chmod 644 /usr/local/etc/au/au.json
 }
 
 createService() {
-  service_file="https://github.com/crossfw/Air-Universe-install/au.service"
+  service_file="https://raw.githubusercontent.com/crossfw/Air-Universe-install/master/au.service"
   wget -N  -O /etc/systemd/system/au.service ${service_file}
   chmod 644 /etc/systemd/system/au.service
   systemctl daemon-reload
