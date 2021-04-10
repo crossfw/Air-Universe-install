@@ -313,6 +313,56 @@ check_install() {
     fi
 }
 
+acme() {
+  cert_path="/usr/local/share/server.crt"
+  key_path="/usr/local/share/server.key"
+  curl  https://get.acme.sh | sh
+  read -r -p "Input domain" domain
+  read -r -p "Choose type: " panelnum
+  echo && echo -e "Choose type:
+  1. http
+  2. dns (only support cloudflare)"
+  read -r -p "Choose type: " issue_type
+
+  if [ "$issue_type" == "1" ]; then
+    echo && echo -e "Choose HTTP type:
+    1. web path
+    2. nginx
+    3. apache
+    4. use 80 port"
+    read -r -p "Choose type: " http_type
+
+    if [ "$http_type" == "1" ]; then
+      read -r -p "Input web path: " web_path
+      acme.sh  --issue  -d "${domain}" --webroot  "${web_path}" --cert-file "${cert_path}" --key-file "${key_path}"
+      return 0
+    fi
+    if [ "$http_type" == "2" ]; then
+      acme.sh  --issue  -d "${domain}" --nginx --cert-file "${cert_path}" --key-file "${key_path}"
+      return 0
+    fi
+    if [ "$http_type" == "3" ]; then
+      read -r -p "Input web path: " web_path
+      acme.sh  --issue  -d "${domain}" --apache --cert-file "${cert_path}" --key-file "${key_path}"
+      return 0
+    fi
+    if [ "$http_type" == "4" ]; then
+      acme.sh  --issue  -d "${domain}" --standalone --cert-file "${cert_path}" --key-file "${key_path}"
+      return 0
+    fi
+
+  fi
+
+  if [ "$issue_type" == "2" ]; then
+    read -r -p "Input your CloudFlare Email: " cf_email
+    export CF_Email="${cf_email}"
+    read -r -p "Input your CloudFlare Key: " cf_key
+    export CF_Key="${cf_key}"
+
+    acme.sh  --issue  -d "${domain}" --dns dns_cf --cert-file "${cert_path}" --key-file "${key_path}"
+  fi
+}
+
 show_status() {
     check_status
     case $? in
@@ -340,7 +390,8 @@ show_enable_status() {
 
 show_Air-Universe_version() {
     echo -n "Air-Universe 版本："
-    /usr/local/bin/au -version
+    /usr/local/bin/au -v
+    /usr/local/bin/xray -v
     echo ""
     if [[ $# == 0 ]]; then
         before_show_menu
@@ -373,7 +424,7 @@ show_menu() {
   ${green}0.${plain} 退出脚本
 ————————————————
   ${green}1.${plain} 安装 Air-Universe
-  ${green}2.${plain} 更新 Air-Universe + Xray
+  ${green}2.${plain} 使用ACME获取SSL证书
   ${green}3.${plain} 卸载 Air-Universe
 ————————————————
   ${green}4.${plain} 启动 Air-Universe
@@ -386,7 +437,7 @@ show_menu() {
  ${green}10.${plain} 取消 Air-Universe 开机自启
 ————————————————
  ${green}11.${plain} 一键安装 bbr (最新内核)
- ${green}12.${plain} 查看 Air-Universe 版本
+ ${green}12.${plain} 查看 Air-Universe & Xray 版本
  ${green}13.${plain} 升级维护脚本
  "
  #后续更新可加入上方字符串中
@@ -398,7 +449,7 @@ show_menu() {
         ;;
         1) check_uninstall && install
         ;;
-        2) check_install && update
+        2) check_install && acme && restart
         ;;
         3) check_install && uninstall
         ;;
