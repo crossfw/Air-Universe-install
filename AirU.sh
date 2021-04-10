@@ -318,8 +318,9 @@ acme() {
   cert_path="/usr/local/share/au/server.crt"
   key_path="/usr/local/share/au/server.key"
   curl  https://get.acme.sh | sh
-  alias acme.sh=~/.acme.sh/acme.sh
-  read -r -p "Input domain" domain
+  alias "acme.sh=~/.acme.sh/acme.sh"
+
+  read -r -p "Input domain: " domain
 
   echo && echo -e "Choose type:
   1. http
