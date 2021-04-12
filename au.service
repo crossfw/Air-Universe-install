@@ -5,7 +5,7 @@ BindsTo=xray.service
 
 [Service]
 Type=simple
-User=nobody
+User=root
 Restart=on-failure
 RestartSec=5s
 ExecStart=/usr/local/bin/au -c /usr/local/etc/au/au.json
