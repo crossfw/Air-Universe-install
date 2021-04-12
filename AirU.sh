@@ -363,7 +363,7 @@ acme() {
   if [ "$issue_type" == "2" ]; then
     read -r -p "Input your CloudFlare Email: " cf_email
     export CF_Email="${cf_email}"
-    read -r -p "Input your CloudFlare Key: " cf_key
+    read -r -p "Input your CloudFlare Global API Key: " cf_key
     export CF_Key="${cf_key}"
 
     ~/.acme.sh/acme.sh  --issue  -d "${domain}" --dns dns_cf --cert-file "${cert_path}" --key-file "${key_path}"
