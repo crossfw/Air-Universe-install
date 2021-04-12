@@ -114,7 +114,7 @@ update() {
 #    fi
     bash <(curl -Ls https://raw.githubusercontent.com/crossfw/Air-Universe-install/master/install.sh) $version
     if [[ $? == 0 ]]; then
-        echo -e "${green}更新完成，已自动重启 Air-Universe，请使用 au log 查看运行日志${plain}"
+        echo -e "${green}更新完成，已自动重启 Air-Universe，请使用菜单页内的查看日志查看运行日志${plain}"
         exit
     fi
 
@@ -161,9 +161,9 @@ start() {
         sleep 2
         check_status
         if [[ $? == 0 ]]; then
-            echo -e "${green}Air-Universe 启动成功，请使用 au log 查看运行日志${plain}"
+            echo -e "${green}Air-Universe 启动成功，请使用查看运行日志${plain}"
         else
-            echo -e "${red}Air-Universe可能启动失败，请稍后使用 au log 查看日志信息${plain}"
+            echo -e "${red}Air-Universe可能启动失败，请稍后使用菜单查看日志信息${plain}"
         fi
     fi
 
@@ -192,9 +192,9 @@ restart() {
     sleep 2
     check_status
     if [[ $? == 0 ]]; then
-        echo -e "${green}Air-Universe 重启成功，请使用 au log 查看运行日志${plain}"
+        echo -e "${green}Air-Universe 重启成功，请使用菜单查看运行日志${plain}"
     else
-        echo -e "${red}Air-Universe可能启动失败，请稍后使用 au log 查看日志信息${plain}"
+        echo -e "${red}Air-Universe可能启动失败，请稍后使用菜单查看日志信息${plain}"
     fi
     if [[ $# == 0 ]]; then
         before_show_menu
