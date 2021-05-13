@@ -343,30 +343,49 @@ acme() {
       read -r -p "Input web path: " web_path
       ~/.acme.sh/acme.sh  --issue  -d "${domain}" --webroot  "${web_path}" --cert-file "${cert_path}" --key-file "${key_path}"
       return 0
-    fi
-    if [ "$http_type" == "2" ]; then
+    elif [ "$http_type" == "2" ]; then
       ~/.acme.sh/acme.sh  --issue  -d "${domain}" --nginx --cert-file "${cert_path}" --key-file "${key_path}"
       return 0
-    fi
-    if [ "$http_type" == "3" ]; then
+    elif [ "$http_type" == "3" ]; then
       read -r -p "Input web path: " web_path
       ~/.acme.sh/acme.sh  --issue  -d "${domain}" --apache --cert-file "${cert_path}" --key-file "${key_path}"
       return 0
-    fi
-    if [ "$http_type" == "4" ]; then
+    elif [ "$http_type" == "4" ]; then
       ~/.acme.sh/acme.sh  --issue  -d "${domain}" --standalone --cert-file "${cert_path}" --key-file "${key_path}"
       return 0
     fi
-
   fi
 
   if [ "$issue_type" == "2" ]; then
-    read -r -p "Input your CloudFlare Email: " cf_email
-    export CF_Email="${cf_email}"
-    read -r -p "Input your CloudFlare Global API Key: " cf_key
-    export CF_Key="${cf_key}"
+    echo && echo -e "Choose a DNS provider:
+    1. CloudFlare
+    2. AliYun
+    3. DNSPod(Tencent)"
+    read -r -p "Choose: " dns_type
 
-    ~/.acme.sh/acme.sh  --issue  -d "${domain}" --dns dns_cf --cert-file "${cert_path}" --key-file "${key_path}"
+    if [ "$dns_type" == "1" ]; then
+      read -r -p "Input your CloudFlare Email: " cf_email
+      export CF_Email="${cf_email}"
+      read -r -p "Input your CloudFlare Global API Key: " cf_key
+      export CF_Key="${cf_key}"
+
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --dns dns_cf --cert-file "${cert_path}" --key-file "${key_path}"
+    elif [ "$dns_type" == "2" ]; then
+      read -r -p "Input your Ali Key: " Ali_Key
+      export Ali_Key="${Ali_Key}"
+      read -r -p "Input your Ali Secret: " Ali_Secret
+      export Ali_Secret="${Ali_Secret}"
+
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --dns dns_ali --cert-file "${cert_path}" --key-file "${key_path}"
+    elif [ "$dns_type" == "3" ]; then
+      read -r -p "Input your DNSPod ID: " DP_Id
+      export DP_Id="${DP_Id}"
+      read -r -p "Input your DNSPod Key: " DP_Key
+      export DP_Id="${DP_Id}"
+
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --dns dns_dp --cert-file "${cert_path}" --key-file "${key_path}"
+    fi
+
   fi
 
   chmod -R 755 /usr/local/share/au/
