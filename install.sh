@@ -30,7 +30,7 @@ panelConfig() {
   fi
   if [ "$panelnum" == "2" ]; then
     panelType="v2board"
-    read -r -p "Enter nodes type, (eg \"vmess\",\"ss\")(DON'T FORGET '\"'): " nType
+    read -r -p "Enter nodes type, (eg \"vmess\",\"ss\",\"trojan\")(DON'T FORGET '\"'): " nType
   fi
 }
 

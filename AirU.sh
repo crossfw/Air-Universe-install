@@ -320,6 +320,8 @@ acme() {
   mkdir -p /usr/local/share/au/
   cert_path="/usr/local/share/au/server.crt"
   key_path="/usr/local/share/au/server.key"
+  rm /usr/local/share/au/server.key
+  rm /usr/local/share/au/server.crt
   curl  https://get.acme.sh | sh
   alias acme.sh=~/.acme.sh/acme.sh
   source ~/.bashrc
@@ -341,19 +343,23 @@ acme() {
 
     if [ "$http_type" == "1" ]; then
       read -r -p "Input web path: " web_path
-      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --webroot  "${web_path}" --cert-file "${cert_path}" --key-file "${key_path}"
-      return 0
-    elif [ "$http_type" == "2" ]; then
-      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --nginx --cert-file "${cert_path}" --key-file "${key_path}"
-      return 0
-    elif [ "$http_type" == "3" ]; then
-      read -r -p "Input web path: " web_path
-      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --apache --cert-file "${cert_path}" --key-file "${key_path}"
-      return 0
-    elif [ "$http_type" == "4" ]; then
-      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --standalone --cert-file "${cert_path}" --key-file "${key_path}"
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --webroot  "${web_path}" --fullchain-file "${cert_path}" --key-file "${key_path}"
       return 0
     fi
+    if [ "$http_type" == "2" ]; then
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --nginx --fullchain-file "${cert_path}" --key-file "${key_path}"
+      return 0
+    fi
+    if [ "$http_type" == "3" ]; then
+      read -r -p "Input web path: " web_path
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --apache --fullchain-file "${cert_path}" --key-file "${key_path}"
+      return 0
+    fi
+    if [ "$http_type" == "4" ]; then
+      ~/.acme.sh/acme.sh  --issue  -d "${domain}" --standalone --fullchain-file "${cert_path}" --key-file "${key_path}"
+      return 0
+    fi
+
   fi
 
   if [ "$issue_type" == "2" ]; then
