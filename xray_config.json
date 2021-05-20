@@ -55,15 +55,6 @@
         "protocol": [
           "bittorrent"
         ],
-        "inboundTag": [
-          "p0",
-          "p1",
-          "p2",
-          "p3",
-          "p4",
-          "p5",
-          "p6"
-        ],
         "outboundTag": "blackhole"
       },
       {
@@ -74,15 +65,6 @@
           "fc00::/7",
           "fe80::/10",
           "172.16.0.0/12"
-        ],
-        "inboundTag": [
-          "p0",
-          "p1",
-          "p2",
-          "p3",
-          "p4",
-          "p5",
-          "p6"
         ],
         "outboundTag": "blackhole"
       }
