@@ -384,7 +384,7 @@ acme() {
       read -r -p "Input your DNSPod ID: " DP_Id
       export DP_Id="${DP_Id}"
       read -r -p "Input your DNSPod Key: " DP_Key
-      export DP_Id="${DP_Id}"
+      export DP_Key="${DP_Key}"
 
       ~/.acme.sh/acme.sh  --issue  -d "${domain}" --dns dns_dp --fullchain-file "${cert_path}" --key-file "${key_path}"
     fi
