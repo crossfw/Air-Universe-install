@@ -326,7 +326,8 @@ acme() {
   curl  https://get.acme.sh | sh
   alias acme.sh=~/.acme.sh/acme.sh
   source ~/.bashrc
-
+  
+  ~/.acme.sh/acme.sh --set-default-ca  --server  letsencrypt
   read -r -p "Input domain: " domain
 
   echo && echo -e "Choose type:
