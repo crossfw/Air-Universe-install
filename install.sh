@@ -23,13 +23,18 @@ panelConfig() {
   read -r -p "Enter node_ids, (eg 1,2,3): " nIds
   echo && echo -e "Choose panel type:
   1. SSPanel
-  2. V2board"
+  2. V2board
+  3. Django-sspanel"
   read -r -p "Choose panel type: " panelnum
   if [ "$panelnum" == "1" ]; then
     panelType="sspanel"
   fi
   if [ "$panelnum" == "2" ]; then
     panelType="v2board"
+    read -r -p "Enter nodes type, (eg \"vmess\",\"ss\",\"trojan\")(DON'T FORGET '\"'): " nType
+  fi
+  if [ "$panelnum" == "3" ]; then
+    panelType="django-sspanel"
     read -r -p "Enter nodes type, (eg \"vmess\",\"ss\",\"trojan\")(DON'T FORGET '\"'): " nType
   fi
 }
