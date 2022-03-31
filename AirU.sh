@@ -519,7 +519,6 @@ get_latest_au_version() {
 update_au() {
   airuniverse_url="https://github.com/crossfw/Air-Universe/releases/download/${VERSION}/Air-Universe-linux-${MACHINE}.zip"
 
-  mv /usr/local/etc/xray/config.json /usr/local/etc/xray/config.json.bak
   wget -N  ${airuniverse_url} -O ./au.zip
   unzip ./au.zip -d /usr/local/bin/
   rm ./au.zip
@@ -607,7 +606,7 @@ show_menu() {
  "
  #后续更新可加入上方字符串中
     show_status
-    echo && read -p "请输入选择 [0-13]: " num
+    echo && read -p "请输入选择 [0-14]: " num
 
     case "${num}" in
         0) exit 0
@@ -638,7 +637,7 @@ show_menu() {
         ;;
         13) check_install && update_xray && restart
         ;;
-        14) identify_the_operating_system_and_architecture && get_latest_au_version && update_au && restart
+        14) stop && identify_the_operating_system_and_architecture && get_latest_au_version && update_au && restart
         ;;
         *) echo -e "${red}请输入正确的数字 [0-12]${plain}"
         ;;
