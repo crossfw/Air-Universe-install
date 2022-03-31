@@ -396,6 +396,138 @@ acme() {
   chmod -R 755 /usr/local/share/au/
 }
 
+identify_the_operating_system_and_architecture() {
+  if [[ "$(uname)" == 'Linux' ]]; then
+    case "$(uname -m)" in
+      'i386' | 'i686')
+        MACHINE='32'
+        ;;
+      'amd64' | 'x86_64')
+        MACHINE='64'
+        ;;
+      'armv5tel')
+        MACHINE='arm32-v5'
+        ;;
+      'armv6l')
+        MACHINE='arm32-v6'
+        grep Features /proc/cpuinfo | grep -qw 'vfp' || MACHINE='arm32-v5'
+        ;;
+      'armv7' | 'armv7l')
+        MACHINE='arm32-v7a'
+        grep Features /proc/cpuinfo | grep -qw 'vfp' || MACHINE='arm32-v5'
+        ;;
+      'armv8' | 'aarch64')
+        MACHINE='arm64-v8a'
+        ;;
+      'mips')
+        MACHINE='mips32'
+        ;;
+      'mipsle')
+        MACHINE='mips32le'
+        ;;
+      'mips64')
+        MACHINE='mips64'
+        ;;
+      'mips64le')
+        MACHINE='mips64le'
+        ;;
+      'ppc64')
+        MACHINE='ppc64'
+        ;;
+      'ppc64le')
+        MACHINE='ppc64le'
+        ;;
+      'riscv64')
+        MACHINE='riscv64'
+        ;;
+      's390x')
+        MACHINE='s390x'
+        ;;
+      *)
+        echo "error: The architecture is not supported."
+        exit 1
+        ;;
+    esac
+    if [[ ! -f '/etc/os-release' ]]; then
+      echo "error: Don't use outdated Linux distributions."
+      exit 1
+    fi
+    # Do not combine this judgment condition with the following judgment condition.
+    ## Be aware of Linux distribution like Gentoo, which kernel supports switch between Systemd and OpenRC.
+    if [[ -f /.dockerenv ]] || grep -q 'docker\|lxc' /proc/1/cgroup && [[ "$(type -P systemctl)" ]]; then
+      true
+    elif [[ -d /run/systemd/system ]] || grep -q systemd <(ls -l /sbin/init); then
+      true
+    else
+      echo "error: Only Linux distributions using systemd are supported."
+      exit 1
+    fi
+    if [[ "$(type -P apt)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='apt -y --no-install-recommends install'
+      PACKAGE_MANAGEMENT_REMOVE='apt purge'
+      package_provide_tput='ncurses-bin'
+    elif [[ "$(type -P dnf)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='dnf -y install'
+      PACKAGE_MANAGEMENT_REMOVE='dnf remove'
+      package_provide_tput='ncurses'
+    elif [[ "$(type -P yum)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='yum -y install'
+      PACKAGE_MANAGEMENT_REMOVE='yum remove'
+      package_provide_tput='ncurses'
+    elif [[ "$(type -P zypper)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='zypper install -y --no-recommends'
+      PACKAGE_MANAGEMENT_REMOVE='zypper remove'
+      package_provide_tput='ncurses-utils'
+    elif [[ "$(type -P pacman)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='pacman -Syu --noconfirm'
+      PACKAGE_MANAGEMENT_REMOVE='pacman -Rsn'
+      package_provide_tput='ncurses'
+    else
+      echo "error: The script does not support the package manager in this operating system."
+      exit 1
+    fi
+  else
+    echo "error: This operating system is not supported."
+    exit 1
+  fi
+}
+
+get_latest_au_version() {
+  # Get Xray latest release version number
+  local tmp_file
+  tmp_file="$(mktemp)"
+  if ! curl -x "${PROXY}" -sS -H "Accept: application/vnd.github.v3+json" -o "$tmp_file" 'https://api.github.com/repos/crossfw/Air-Universe/releases/latest'; then
+    "rm" "$tmp_file"
+    echo 'error: Failed to get release list, please check your network.'
+    exit 1
+  fi
+  RELEASE_LATEST="$(sed 'y/,/\n/' "$tmp_file" | grep 'tag_name' | awk -F '"' '{print $4}')"
+  if [[ -z "$RELEASE_LATEST" ]]; then
+    if grep -q "API rate limit exceeded" "$tmp_file"; then
+      echo "error: github API rate limit exceeded"
+    else
+      echo "error: Failed to get the latest release version."
+      echo "Welcome bug report:https://github.com/crossfw/Air-Universe/issues"
+    fi
+    "rm" "$tmp_file"
+    exit 1
+  fi
+  "rm" "$tmp_file"
+  VERSION="v${RELEASE_LATEST#v}"
+}
+
+update_au() {
+  airuniverse_url="https://github.com/crossfw/Air-Universe/releases/download/${VERSION}/Air-Universe-linux-${MACHINE}.zip"
+
+  mv /usr/local/etc/xray/config.json /usr/local/etc/xray/config.json.bak
+  wget -N  ${airuniverse_url} -O ./au.zip
+  unzip ./au.zip -d /usr/local/bin/
+  rm ./au.zip
+  rm /usr/local/bin/au
+  mv /usr/local/bin/Air-Universe /usr/local/bin/au
+  chmod +x /usr/local/bin/au
+}
+
 show_status() {
     check_status
     case $? in
@@ -471,6 +603,7 @@ show_menu() {
  ${green}11.${plain} 一键安装 bbr (最新内核)
  ${green}12.${plain} 查看 Air-Universe & Xray 版本
  ${green}13.${plain} 升级Xray内核
+ ${green}14.${plain} 升级Air-Universe
  "
  #后续更新可加入上方字符串中
     show_status
@@ -504,6 +637,8 @@ show_menu() {
         12) check_install && show_Air-Universe_version
         ;;
         13) check_install && update_xray && restart
+        ;;
+        14) identify_the_operating_system_and_architecture && get_latest_au_version && update_au && restart
         ;;
         *) echo -e "${red}请输入正确的数字 [0-12]${plain}"
         ;;
