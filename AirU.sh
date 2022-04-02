@@ -637,7 +637,7 @@ show_menu() {
         ;;
         13) check_install && update_xray && restart
         ;;
-        14) stop && identify_the_operating_system_and_architecture && get_latest_au_version && update_au && restart
+        14) check_install && identify_the_operating_system_and_architecture && get_latest_au_version && update_au && restart
         ;;
         *) echo -e "${red}请输入正确的数字 [0-12]${plain}"
         ;;
