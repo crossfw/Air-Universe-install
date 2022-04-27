@@ -562,6 +562,16 @@ show_Air-Universe_version() {
     fi
 }
 
+open_xray_config(){
+  echo "如遇报错请安装vi"
+  vi /usr/local/etc/xray/config.json
+}
+
+open_au_config(){
+  echo "如遇报错请安装vi"
+  vi  /usr/local/etc/au/au.json
+}
+
 show_usage() {
     echo "Air-Universe 管理脚本使用方法: "
     echo "------------------------------------------"
@@ -603,10 +613,13 @@ show_menu() {
  ${green}12.${plain} 查看 Air-Universe & Xray 版本
  ${green}13.${plain} 升级Xray内核
  ${green}14.${plain} 升级Air-Universe
+ ————————————————
+ ${green}15.${plain} 编辑Xray配置文件
+ ${green}16.${plain} 编辑Air-Universe配置文件
  "
  #后续更新可加入上方字符串中
     show_status
-    echo && read -p "请输入选择 [0-14]: " num
+    echo && read -p "请输入选择 [0-16]: " num
 
     case "${num}" in
         0) exit 0
@@ -639,7 +652,11 @@ show_menu() {
         ;;
         14) stop && identify_the_operating_system_and_architecture && get_latest_au_version && update_au && restart
         ;;
-        *) echo -e "${red}请输入正确的数字 [0-12]${plain}"
+        15) check_install && open_xray_config
+        ;;
+        16) check_install && open_au_config
+        ;;
+        *) echo -e "${red}请输入正确的数字 [0-16]${plain}"
         ;;
     esac
 }
