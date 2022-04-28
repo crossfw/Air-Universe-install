@@ -29,13 +29,69 @@ panelConfig() {
   if [ "$panelnum" == "1" ]; then
     panelType="sspanel"
   fi
+
   if [ "$panelnum" == "2" ]; then
     panelType="v2board"
-    read -r -p "Enter nodes type, (eg \"vmess\",\"ss\",\"trojan\")(DON'T FORGET '\"'): " nType
+    echo
+    echo
+    echo "Please select node type:"
+    echo "1. Vmess"
+    echo "2. Shadowsocks"
+    echo "3. Trojan "
+    echo "4. Vmess + Shadowsocks"
+    echo "5. Vmess + Trojan"
+    echo "6. Shadowsocks + Trojan"
+    echo "7. Vmess + Shadowsocks + Trojan"
+    echo
+    read -r -p "Please select nodes type (default is 1. Vmess): " inputNodeType
+    
+    if [ "$inputNodeType" == "2" ]; then
+      nType="\"ss\""
+    elif [ "$inputNodeType" == "3" ]; then
+      nType="\"trojan\""
+    elif [ "$inputNodeType" == "4" ]; then
+      nType="\"vmess\", \"ss\""
+    elif [ "$inputNodeType" == "5" ]; then
+      nType="\"vmess\", \"trojan\""
+    elif [ "$inputNodeType" == "6" ]; then
+      nType="\"ss\", \"trojan\""
+    elif [ "$inputNodeType" == "7" ]; then
+      nType="\"vmess\", \"ss\", \"trojan\""    
+    else
+      nType="\"vmess\""      
+    fi
   fi
+  
   if [ "$panelnum" == "3" ]; then
     panelType="django-sspanel"
-    read -r -p "Enter nodes type, (eg \"vmess\",\"ss\",\"trojan\")(DON'T FORGET '\"'): " nType
+    echo
+    echo
+    echo "Please select node type:"
+    echo "1. Vmess"
+    echo "2. Shadowsocks"
+    echo "3. Trojan "
+    echo "4. Vmess + Shadowsocks"
+    echo "5. Vmess + Trojan"
+    echo "6. Shadowsocks + Trojan"
+    echo "7. Vmess + Shadowsocks + Trojan"
+    echo
+    read -r -p "Please select nodes type (default is 1. Vmess): " inputNodeType
+    
+    if [ "$inputNodeType" == "2" ]; then
+      nType="\"ss\""
+    elif [ "$inputNodeType" == "3" ]; then
+      nType="\"trojan\""
+    elif [ "$inputNodeType" == "4" ]; then
+      nType="\"vmess\", \"ss\""
+    elif [ "$inputNodeType" == "5" ]; then
+      nType="\"vmess\", \"trojan\""
+    elif [ "$inputNodeType" == "6" ]; then
+      nType="\"ss\", \"trojan\""
+    elif [ "$inputNodeType" == "7" ]; then
+      nType="\"vmess\", \"ss\", \"trojan\""    
+    else
+      nType="\"vmess\""      
+    fi
   fi
 }
 
