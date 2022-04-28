@@ -29,13 +29,45 @@ panelConfig() {
   if [ "$panelnum" == "1" ]; then
     panelType="sspanel"
   fi
+
   if [ "$panelnum" == "2" ]; then
-    panelType="v2board"
-    read -r -p "Enter nodes type, (eg \"vmess\",\"ss\",\"trojan\")(DON'T FORGET '\"'): " nType
+      panelType="v2board"
   fi
+
   if [ "$panelnum" == "3" ]; then
-    panelType="django-sspanel"
-    read -r -p "Enter nodes type, (eg \"vmess\",\"ss\",\"trojan\")(DON'T FORGET '\"'): " nType
+      panelType="django-sspanel"
+  fi
+
+  IFS=', ' read -r -a id_arr <<< "$nIds"
+
+  if [ "$panelnum" == "2" ] || [ "$panelnum" == "3" ]; then
+    echo
+    echo "Please select node type[0-2]:"
+    echo "0. VMess"
+    echo "1. ShadowSocks"
+    echo "2. Trojan "
+    echo
+
+    for id in "${id_arr[@]}"
+    do
+      while ((1)); do
+        read -r -p "Please select node type for id ${id} : " inputNodeType
+          if [ "$inputNodeType" == "0"  ]; then
+            nType=$nType"\"vmess\","
+            break
+          elif [ "$inputNodeType" == "1" ]; then
+            nType=$nType"\"ss\","
+            break
+          elif [ "$inputNodeType" == "2" ]; then
+            nType=$nType"\"trojan\","
+            break
+          else
+            echo "Input error [0-2]"
+          fi
+      done
+
+    done
+    nType=${nType%?}
   fi
 }
 
