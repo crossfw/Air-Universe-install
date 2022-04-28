@@ -31,67 +31,43 @@ panelConfig() {
   fi
 
   if [ "$panelnum" == "2" ]; then
-    panelType="v2board"
-    echo
-    echo
-    echo "Please select node type:"
-    echo "1. Vmess"
-    echo "2. Shadowsocks"
-    echo "3. Trojan "
-    echo "4. Vmess + Shadowsocks"
-    echo "5. Vmess + Trojan"
-    echo "6. Shadowsocks + Trojan"
-    echo "7. Vmess + Shadowsocks + Trojan"
-    echo
-    read -r -p "Please select nodes type (default is 1. Vmess): " inputNodeType
-    
-    if [ "$inputNodeType" == "2" ]; then
-      nType="\"ss\""
-    elif [ "$inputNodeType" == "3" ]; then
-      nType="\"trojan\""
-    elif [ "$inputNodeType" == "4" ]; then
-      nType="\"vmess\", \"ss\""
-    elif [ "$inputNodeType" == "5" ]; then
-      nType="\"vmess\", \"trojan\""
-    elif [ "$inputNodeType" == "6" ]; then
-      nType="\"ss\", \"trojan\""
-    elif [ "$inputNodeType" == "7" ]; then
-      nType="\"vmess\", \"ss\", \"trojan\""    
-    else
-      nType="\"vmess\""      
-    fi
+      panelType="v2board"
   fi
-  
+
   if [ "$panelnum" == "3" ]; then
-    panelType="django-sspanel"
+      panelType="django-sspanel"
+  fi
+
+  IFS=', ' read -r -a id_arr <<< "$nIds"
+
+  if [ "$panelnum" == "2" ] || [ "$panelnum" == "3" ]; then
     echo
+    echo "Please select node type[0-2]:"
+    echo "0. VMess"
+    echo "1. ShadowSocks"
+    echo "2. Trojan "
     echo
-    echo "Please select node type:"
-    echo "1. Vmess"
-    echo "2. Shadowsocks"
-    echo "3. Trojan "
-    echo "4. Vmess + Shadowsocks"
-    echo "5. Vmess + Trojan"
-    echo "6. Shadowsocks + Trojan"
-    echo "7. Vmess + Shadowsocks + Trojan"
-    echo
-    read -r -p "Please select nodes type (default is 1. Vmess): " inputNodeType
-    
-    if [ "$inputNodeType" == "2" ]; then
-      nType="\"ss\""
-    elif [ "$inputNodeType" == "3" ]; then
-      nType="\"trojan\""
-    elif [ "$inputNodeType" == "4" ]; then
-      nType="\"vmess\", \"ss\""
-    elif [ "$inputNodeType" == "5" ]; then
-      nType="\"vmess\", \"trojan\""
-    elif [ "$inputNodeType" == "6" ]; then
-      nType="\"ss\", \"trojan\""
-    elif [ "$inputNodeType" == "7" ]; then
-      nType="\"vmess\", \"ss\", \"trojan\""    
-    else
-      nType="\"vmess\""      
-    fi
+
+    for id in "${id_arr[@]}"
+    do
+      while ((1)); do
+        read -r -p "Please select node type for id ${id} : " inputNodeType
+          if [ "$inputNodeType" == "0"  ]; then
+            nType=$nType"\"vmess\","
+            break
+          elif [ "$inputNodeType" == "1" ]; then
+            nType=$nType"\"ss\","
+            break
+          elif [ "$inputNodeType" == "2" ]; then
+            nType=$nType"\"trojan\","
+            break
+          else
+            echo "Input error [0-2]"
+          fi
+      done
+
+    done
+    nType=${nType%?}
   fi
 }
 
