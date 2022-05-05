@@ -95,10 +95,10 @@ check_sys() {
 Installation_dependency() {
   if [[ ${release} == "centos" ]]; then
     yum update -y
-    yum install -y gzip ca-certificates curl unzip socat
+    yum install -y gzip ca-certificates curl wget unzip socat
   else
     apt-get update -y
-    apt-get install -y ca-certificates curl unzip socat
+    apt-get install -y ca-certificates curl wget unzip socat
   fi
   cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
   mkdir /var/log/au
